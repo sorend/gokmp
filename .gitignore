@@ -1,0 +1,5 @@
+bin/
+vendor/
+*.sqlite
+go.sum
+gokmp
