@@ -3,3 +3,7 @@ vendor/
 *.sqlite
 go.sum
 gokmp
+cmd/flickr_config.go
+.\#*
+flickr.env
+.gokmp.yaml

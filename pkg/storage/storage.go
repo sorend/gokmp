@@ -47,28 +47,31 @@ func (s *Storage) Filename(photosetId string, photosetTitle string, photoId stri
 }
 
 func findLocalPhotos(destination string) (map[string]*LocalPhoto, error) {
-	photoset_folders, err := ioutil.ReadDir(destination)
+	photosetDirs, err := ioutil.ReadDir(destination)
 	if err != nil {
 		return nil, err
 	}
 
 	res := map[string]*LocalPhoto{}
-	for _, photoset_folder := range photoset_folders {
-		splits := strings.Split(photoset_folder.Name(), "-")
-		if photoset_folder.IsDir() && len(splits) > 1 {
-			photoset_id := splits[len(splits) - 1]
-			photo_files, err := ioutil.ReadDir(path.Join(destination, photoset_folder.Name()))
+	for _, photosetDir := range photosetDirs {
+		splits := strings.Split(photosetDir.Name(), "-")
+		if photosetDir.IsDir() && len(splits) > 1 {
+			photosetId := splits[len(splits) - 1]
+			photoFiles, err := ioutil.ReadDir(path.Join(destination, photosetDir.Name()))
 			if err != nil {
 				return res, err // partial
 			}
-			for _, photo_file := range photo_files {
-				photo_splits := strings.Split(photo_file.Name(), "-")
-				photo_id := strings.Split(photo_splits[len(photo_splits) - 1], ".")[0]
-				res[photoset_id + "/" + photo_id] = &LocalPhoto{
-					PhotosetId: photoset_id,
-					PhotoId: photo_id,
-					PhotoFilename: photo_file.Name(),
-					PhotosetDirname: path.Join(destination, photoset_folder.Name()),
+			for _, photoFile := range photoFiles {
+				if !strings.HasSuffix(photoFile.Name(), ".jpg") {
+					continue
+				}
+				splitsPhoto := strings.Split(photoFile.Name(), "-")
+				photoId := strings.Split(splitsPhoto[len(splitsPhoto) - 1], ".")[0]
+				res[photosetId + "/" + photoId] = &LocalPhoto{
+					PhotosetId: photosetId,
+					PhotoId: photoId,
+					PhotoFilename: photoFile.Name(),
+					PhotosetDirname: path.Join(destination, photosetDir.Name()),
 				}
 			}
 		}

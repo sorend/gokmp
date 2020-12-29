@@ -3,23 +3,18 @@ package backup
 
 import (
 	"fmt"
-	"os"
 	"github.com/sorend/gokmp/pkg/storage"
 	"github.com/sorend/gokmp/pkg/flickr"
 )
 
 
-func Run(nsid string, destination string) error {
-
-
+func Run(ApiKey string, ApiSecret string, accessToken string, accessSecret string, nsid string, destination string) error {
 	client := flickr.NewFlickr(
-		os.Getenv("FLICKR_API_KEY"),
-		os.Getenv("FLICKR_API_SECRET"),
-		os.Getenv("FLICKR_OAUTH_TOKEN"),
-		os.Getenv("FLICKR_OAUTH_SECRET"),
+		ApiKey,
+		ApiSecret,
+		accessToken,
+		accessSecret,
 	)
-	fmt.Printf("Client %s\n", client)
-
 	if err := doBackup(client, nsid, destination); err != nil {
 		panic(err)
 	}

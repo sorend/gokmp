@@ -1,16 +1,26 @@
-
 package cmd
 
 import (
 	"fmt"
 	"os"
+	"github.com/spf13/viper"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Use: "gokmp",
 	Short: "gokmp: Backup your Flickr pictures",
-	Long: `gokmp: Automation tool for backing up your Flickr pictures locally on disk`,
+	Long: `
+                    ___
+     _______ ______/   / ___ _  ___________
+    / __   // _   //  / /  /  \/ __\    __ \
+   /  |/   /  /   /  /_/  /   ______\   |/  \
+  /   /   /  /   /     __/       ___/   /   /
+  \__    /______/__/\   \ _/\__/  _/   ____/  Go Keep My Photos
+==__/   / ========== \___\ == /___/   / =========================
+ /_____/                         /___/
+
+gokmp: Commandline tool for backing up your Flickr pictures locally.`,
 }
 
 func Execute() {
@@ -21,5 +31,18 @@ func Execute() {
 }
 
 func init() {
-	// nil
+	cobra.OnInitialize(initConfig)
+}
+
+const ConfigFile = ".gokmp.yaml"
+
+func initConfig() {
+	viper.SetConfigType("yaml")
+	viper.SetConfigFile(ConfigFile)
+	viper.SetEnvPrefix("GOKMP")
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err != nil {
+		// do nothing
+	}
 }

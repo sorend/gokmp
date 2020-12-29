@@ -2,7 +2,7 @@
 all: compile
 
 ## compile: Compile go program
-compile: go-clean go-get go-build
+compile: go-clean go-get go-generate go-build
 
 ## install: Install dependencies (go get)
 install: go-get

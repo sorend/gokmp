@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	// "fmt"
-	// "os"
+	"errors"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/sorend/gokmp/pkg/backup"
 )
 
@@ -15,7 +15,12 @@ var backupCmd = &cobra.Command{
 	Short: "Backup from Flickr",
 	Long: `Backup pictures from Flickr to local disk`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := backup.Run(BackupNsid, BackupDirectory); err != nil {
+		accessToken := viper.GetString("accessToken")
+		accessSecret := viper.GetString("accessSecret")
+		if accessToken == "" || accessSecret == "" {
+			return errors.New("Please 'login' before calling 'backup' (no access token found)")
+		}
+		if err := backup.Run(FlickrApiKey, FlickrApiSecret, accessToken, accessSecret, BackupNsid, BackupDirectory); err != nil {
 			return err
 		}
 		return nil
