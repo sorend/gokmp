@@ -27,11 +27,25 @@ $ curl
 ```
 
 
+### Flickr API key and secret
 
-## Flickr API key and secret
-
-
-
-
+The binary available under releases has an API key built in. If you wish to bake
+a binary with your own API key (for developing on gokmp locally), you need to
+have an API key available in the environment
 
 You can get it from the App Garden: https://www.flickr.com/services/apps/create/
+
+When building you need to have them in the environment, as `go generate` will use them:
+
+```bash
+$ export FLICKR_API_KEY=myapikey FLICKR_API_SECRET=myapisecret
+$ go generate
+$ cat cmd/flickr_config
+
+package cmd
+
+const (
+    FlickrApiKey = "myapikey"
+    FlickrApiSecret = "myapisecret"
+)
+```
