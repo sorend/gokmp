@@ -65,7 +65,7 @@ func doBackup(client *flickr.Flickr, nsid string, destination string) error {
 		if err != nil {
 			return err
 		}
-		best := takeBestWidth(sizes)
+		best := takeBest(sizes)
 		fmt.Printf("> Backing up %s ..\n", best.Source)
 		destinationFile := existing.Filename(item.photoset.Id, item.photoset.Title.Text, item.photo.Id, item.photo.Title)
 		if err = client.Download(best.Source, destinationFile); err != nil {
@@ -76,10 +76,13 @@ func doBackup(client *flickr.Flickr, nsid string, destination string) error {
 }
 
 
-func takeBestWidth(sizes []*flickr.PhotosGetSizesSize) *flickr.PhotosGetSizesSize {
+func takeBest(sizes []*flickr.PhotosGetSizesSize) *flickr.PhotosGetSizesSize {
 	best := sizes[0]
 	for _, s := range sizes {
-		if s.Width > best.Width {
+		if s.Label == "Original" {
+			return s
+		}
+		if s.Width > best.Width && s.Height > best.Height {
 			best = s
 		}
 	}
