@@ -22,7 +22,8 @@ Download from github releases:
 
 ```bash
 # download binary
-curl ... -o gokmp
+export GOKMP_RELEASE=v0.1
+curl https://github.com/sorend/gokmp/releases/download/$GOKMP_RELEASE/gokmp-linux-$GOKMP_RELEASE -o gokmp
 chmod +x gokmp
 ```
 
@@ -65,7 +66,6 @@ If gokmp fails (usually due to Flickr timeout or application error), you can sim
 You should not run multiple gokmp instances simultaneously as they will compete over completing the
 same images.
 
-
 ### Flickr API key and secret
 
 The binary available under releases has an API key built in. If you wish to bake
@@ -88,3 +88,11 @@ const (
     FlickrApiSecret = "myapisecret"
 )
 ```
+
+### To Do
+
+Some functionality missing compared to old version:
+
+* Backup photos that are not in a photoset.
+* Prefix photo files with the date taken.
+
