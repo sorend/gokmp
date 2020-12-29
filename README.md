@@ -22,7 +22,7 @@ Download the binary from Github releases (you can also do this manually through 
 
 ```bash
 $ export GOKMP_RELEASE=v0.1
-$ curl https://github.com/sorend/gokmp/releases/download/$GOKMP_RELEASE/gokmp-linux-$GOKMP_RELEASE -o gokmp
+$ curl -sL https://github.com/sorend/gokmp/releases/download/$GOKMP_RELEASE/gokmp-linux-$GOKMP_RELEASE -o gokmp
 $ chmod +x gokmp
 ```
 
@@ -89,4 +89,3 @@ const (
     FlickrApiSecret = "myapisecret"
 )
 ```
-
