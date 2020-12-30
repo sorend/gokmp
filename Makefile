@@ -1,12 +1,12 @@
 
 VERSION = $(shell git describe --tags --always)
 
-all: clean deps binaries
+all: clean deps binaries docker
 
 binaries:
-	GOOS=windows GOARCH=amd64 go build -o bin/gokmp-windows-$(VERSION).exe
-	GOOS=darwin GOARCH=amd64 go build -o bin/gokmp-darwin-$(VERSION)
-	GOOS=linux GOARCH=amd64 go build -o bin/gokmp-linux-$(VERSION)
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o bin/gokmp-windows-$(VERSION).exe
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o bin/gokmp-darwin-$(VERSION)
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/gokmp-linux-$(VERSION)
 
 deps:
 	go generate
@@ -15,3 +15,6 @@ deps:
 clean:
 	rm -rf gokmp-* bin/ cmd/flickr_config.go
 	go clean
+
+docker:
+	docker build --build-arg VERSION=$(VERSION) -t sorend/gokmp .
