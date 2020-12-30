@@ -1,5 +1,6 @@
 
 VERSION = $(shell git describe --tags --always)
+IMAGE = sorend/gokmp
 
 all: clean deps binaries docker
 
@@ -17,4 +18,5 @@ clean:
 	go clean
 
 docker:
-	docker build --build-arg VERSION=$(VERSION) -t sorend/gokmp .
+	docker build --build-arg VERSION=$(VERSION) -t $(IMAGE):$(VERSION) .
+	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
