@@ -5,6 +5,7 @@ import (
 	"os"
 	"github.com/spf13/viper"
 	"github.com/spf13/cobra"
+	// jww "github.com/spf13/jwalterweatherman"
 )
 
 var rootCmd = &cobra.Command{
@@ -34,14 +35,17 @@ func init() {
 	cobra.OnInitialize(initConfig)
 }
 
-const ConfigFile = ".gokmp.yaml"
-
 func initConfig() {
-	viper.SetConfigType("yaml")
-	viper.SetConfigFile(ConfigFile)
-	viper.SetEnvPrefix("GOKMP")
-	viper.AutomaticEnv()
 
+	// jww.SetLogThreshold(jww.LevelTrace)
+        // jww.SetStdoutThreshold(jww.LevelInfo)
+	viper.SetConfigName("gokmp")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("/etc/gokmp/")
+	viper.AddConfigPath("$HOME/.gokmp")
+	viper.AddConfigPath(".")
+	// viper.SetEnvPrefix("GOKMP")
+	// viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		// do nothing
 	}
