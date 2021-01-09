@@ -30,7 +30,7 @@ docker: build
 
 # Push docker image
 docker-deploy:
-	echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
+	echo "$(DOCKER_PASSWORD)" | docker login -u $(DOCKER_USERNAME) --password-stdin
 	docker push $(IMAGE):$(VERSION)
 	docker push $(IMAGE):latest
 

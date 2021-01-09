@@ -44,8 +44,8 @@ func initConfig() {
 	viper.AddConfigPath("/etc/gokmp/")
 	viper.AddConfigPath("$HOME/.gokmp")
 	viper.AddConfigPath(".")
-	// viper.SetEnvPrefix("GOKMP")
-	// viper.AutomaticEnv()
+	viper.SetEnvPrefix("GOKMP")
+	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		// do nothing
 	}
