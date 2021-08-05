@@ -4,12 +4,15 @@ package backup
 import (
 	"fmt"
 	"strings"
+	"go.uber.org/zap"
 	"github.com/sorend/gokmp/pkg/storage"
 	"github.com/sorend/gokmp/pkg/flickr"
 )
 
+var logger = zap.NewExample().Sugar()
 
 func Run(ApiKey string, ApiSecret string, accessToken string, accessSecret string, nsid string, destination string) error {
+	defer logger.Sync()
 	client := flickr.NewFlickr(
 		ApiKey,
 		ApiSecret,
@@ -19,6 +22,7 @@ func Run(ApiKey string, ApiSecret string, accessToken string, accessSecret strin
 	if err := doBackup(client, nsid, destination); err != nil {
 		panic(err)
 	}
+	logger.Infow("All done :-)")
 	fmt.Println("All done :-)")
 	return nil
 }

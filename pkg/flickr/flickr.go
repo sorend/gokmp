@@ -1,14 +1,15 @@
 package flickr
 
 import (
-	"fmt"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"path"
 	"os"
+	"path"
+
 	"github.com/dghubble/oauth1"
 )
 
@@ -27,7 +28,7 @@ type Flickr struct {
 	client *http.Client
 }
 
-type Params map[string]string  // Params datatype
+type Params map[string]string // Params datatype
 
 func (f *Flickr) PhotosetsGetList(nsid string) (*PhotosetsGetList, error) {
 	res := &PhotosetsGetList{}
@@ -68,7 +69,7 @@ func (f *Flickr) PhotosetsGetPhotosPage(photosetId string, page int) (*Photosets
 		page = 1
 	}
 	res := &PhotosetsGetPhotos{}
-	if err := f.Request("photosets.getPhotos", Params{"photoset_id": photosetId, "page": fmt.Sprintf("%d", page), "extras":"media"}, &res); err != nil {
+	if err := f.Request("photosets.getPhotos", Params{"photoset_id": photosetId, "page": fmt.Sprintf("%d", page), "extras": "media"}, &res); err != nil {
 		return nil, err
 	}
 	return res, nil
@@ -171,8 +172,8 @@ func (f *Flickr) Download(url string, destinationFile string) error {
 }
 
 type FailResponse struct {
-	Stat string
-	Code int
+	Stat    string
+	Code    int
 	Message string
 }
 
@@ -192,7 +193,7 @@ func Parse(data []byte, v interface{}) error {
 	return nil
 }
 
-func Fail (data []byte) error {
+func Fail(data []byte) error {
 	fail := &FailResponse{}
 	err := json.Unmarshal(data, fail)
 
@@ -205,59 +206,59 @@ func Fail (data []byte) error {
 
 type PhotosetsGetPhotos struct {
 	Photoset struct {
-		Id string `json:"id"`
+		Id     string                     `json:"id"`
 		Photos []*PhotosetsGetPhotosPhoto `json:"photo"`
-		Page string `json:"page"`
-		Pages int `json:"pages"`
-		Title string `json:"title"`
-		Total int `json:"total"`
+		Page   string                     `json:"page"`
+		Pages  int                        `json:"pages"`
+		Title  string                     `json:"title"`
+		Total  int                        `json:"total"`
 	} `json:"photoset"`
 	Stat string `json:"stat"`
 }
 
 type PhotosGetNotInSet struct {
 	Photos struct {
-		Page int `json:"page"`
-		Pages int `json:"pages"`
-		Perpage int `json:"perpage"`
-		Total string `json:"total"`
-		Photo []*PhotosetsGetPhotosPhoto `json:"photo"`
+		Page    int                        `json:"page"`
+		Pages   int                        `json:"pages"`
+		Perpage int                        `json:"perpage"`
+		Total   int                        `json:"total"`
+		Photo   []*PhotosetsGetPhotosPhoto `json:"photo"`
 	} `json:"photos"`
 	Stat string `json:"stat"`
 }
 
 type PhotosetsGetPhotosPhoto struct {
-	Id string `json:"id"`
+	Id     string `json:"id"`
 	Secret string `json:"secret"`
 	Server string `json:"server"`
-	Farm int `json:"farm"`
-	Title string `json:"title"`
-	Media string `json:"media"`
+	Farm   int    `json:"farm"`
+	Title  string `json:"title"`
+	Media  string `json:"media"`
 }
 
 type PhotosetsGetList struct {
 	Photosets struct {
-		CanCreate int `json:"cancreate"`
-		Page int `json:"page"`
-		Pages int `json:"pages"`
-		Total int `json:"total"`
+		CanCreate int                         `json:"cancreate"`
+		Page      int                         `json:"page"`
+		Pages     int                         `json:"pages"`
+		Total     int                         `json:"total"`
 		Photosets []*PhotosetsGetListPhotoset `json:"photoset"`
 	} `json:"photosets"`
 }
 
 type PhotosetsGetListPhotoset struct {
-	Id string `json:"id"`
-	Owner string `json:"owner"`
-	Secret string `json:"secret"`
-	Server string `json:"server"`
-	Farm int `json:"farm"`
-	CountPhotos int `json:"count_photos"`
-	CountVideos int `json:"count_videos"`
-	Title Content `json:"title"`
+	Id          string  `json:"id"`
+	Owner       string  `json:"owner"`
+	Secret      string  `json:"secret"`
+	Server      string  `json:"server"`
+	Farm        int     `json:"farm"`
+	CountPhotos int     `json:"count_photos"`
+	CountVideos int     `json:"count_videos"`
+	Title       Content `json:"title"`
 	Description Content `json:"description"`
-	CanComment int `json:"can_comment"`
-	DateCreate string `json:"date_create"`
-	DateUpdate string `json:"date_update"`
+	CanComment  int     `json:"can_comment"`
+	DateCreate  string  `json:"date_create"`
+	DateUpdate  string  `json:"date_update"`
 }
 
 type Content struct {
@@ -266,53 +267,51 @@ type Content struct {
 
 type PhotosGetSizes struct {
 	Sizes struct {
-		CanBlog int `json:"canblog"`
-		CanPrint int `json:"canprint"`
-		CanDownload int `json:"candownload"`
-		Size []*PhotosGetSizesSize `json:"size"`
+		CanBlog     int                   `json:"canblog"`
+		CanPrint    int                   `json:"canprint"`
+		CanDownload int                   `json:"candownload"`
+		Size        []*PhotosGetSizesSize `json:"size"`
 	} `json:"sizes"`
 	Stat string `json:"stat"`
 }
 
-
 type PhotosGetSizesSize struct {
-	Label string `json:"label"`
-	Width int `json:"width"`
-	Height int `json:"height"`
+	Label  string `json:"label"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
 	Source string `json:"source"`
-	Url string `json:"url"`
-	Media string `json:"media"`
+	Url    string `json:"url"`
+	Media  string `json:"media"`
 }
 
 type PhotosGetInfo struct {
 	Photo *PhotosGetInfoPhoto `json:"photo"`
-	Stat string `json:"stat"`
+	Stat  string              `json:"stat"`
 }
 
 type PhotosGetInfoPhoto struct {
-	Id string `json:"id"`
-	Secret string `json:"secret"`
-	Server string `json:"server"`
-	Farm int `json:"farm"`
+	Id           string `json:"id"`
+	Secret       string `json:"secret"`
+	Server       string `json:"server"`
+	Farm         int    `json:"farm"`
 	DateUploaded string `json:"farm"`
-	IsFavorite int `json:"isfavorite"`
+	IsFavorite   int    `json:"isfavorite"`
 	// License int `json:"license"`
 	// SafetyLevel int `json:"safety_level"`
-	Rotation int `json:"rotation"`
-	Title Content `json:"title"`
+	Rotation   int     `json:"rotation"`
+	Title      Content `json:"title"`
 	Visibility struct {
 		IsPublic int `json:"ispublic"`
 		IsFriend int `json:"isfriend"`
 		IsFamily int `json:"isfamily"`
 	} `json:"visibility"`
 	Dates struct {
-		Posted string `json:"posted"`
-		Taken string `json:"taken"`
+		Posted     string `json:"posted"`
+		Taken      string `json:"taken"`
 		Lastupdate string `json:"lastupdate"`
 	} `json:"dates"`
 	Media string `json:"media"`
 }
-
 
 /*
 {
@@ -399,4 +398,3 @@ type PhotosGetInfoPhoto struct {
   "stat": "ok"
   }
 */
-

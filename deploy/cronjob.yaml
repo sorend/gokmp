@@ -1,0 +1,49 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: flickr-backup
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 4
+      template:
+        spec:
+          containers:
+          - command:
+            - /gokmp
+            - backup
+            - -d
+            - /backup
+            - -i
+            - "59362368@N00"
+            image: sorend/gokmp:latest
+            imagePullPolicy: IfNotPresent
+            name: kmp
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /backup
+              name: data-volume
+            - mountPath: /etc/gokmp
+              name: flickr-access-token
+              readOnly: true
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - hostPath:
+              path: /home/sorend/flickr-backup
+              type: Directory
+            name: data-volume
+          - name: flickr-access-token
+            secret:
+              defaultMode: 422
+              secretName: flickr-access-token
+  schedule: 43 * * * *
+  successfulJobsHistoryLimit: 1
+  suspend: false
