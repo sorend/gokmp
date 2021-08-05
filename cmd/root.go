@@ -3,13 +3,14 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"github.com/spf13/viper"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	// jww "github.com/spf13/jwalterweatherman"
 )
 
 var rootCmd = &cobra.Command{
-	Use: "gokmp",
+	Use:   "gokmp",
 	Short: "gokmp: Backup your Flickr pictures",
 	Long: `
                     ___
@@ -38,7 +39,7 @@ func init() {
 func initConfig() {
 
 	// jww.SetLogThreshold(jww.LevelTrace)
-        // jww.SetStdoutThreshold(jww.LevelInfo)
+	// jww.SetStdoutThreshold(jww.LevelInfo)
 	viper.SetConfigName("gokmp")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("/etc/gokmp/")
