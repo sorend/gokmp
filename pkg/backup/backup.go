@@ -1,12 +1,12 @@
-
 package backup
 
 import (
 	"fmt"
 	"strings"
-	"go.uber.org/zap"
-	"github.com/sorend/gokmp/pkg/storage"
+
 	"github.com/sorend/gokmp/pkg/flickr"
+	"github.com/sorend/gokmp/pkg/storage"
+	"go.uber.org/zap"
 )
 
 var logger = zap.NewExample().Sugar()
@@ -70,7 +70,7 @@ func doBackupPhotos(client *flickr.Flickr, existing *storage.Storage, photoset *
 	for _, photo := range photos {
 		if photo.Media == "photo" && !existing.Has(photoset.Id, photo.Id) {
 			needBackup = append(needBackup, &QueueItem{
-				photo: photo,
+				photo:    photo,
 				photoset: photoset,
 			})
 		}
@@ -122,8 +122,7 @@ func takeBest(sizes []*flickr.PhotosGetSizesSize) *flickr.PhotosGetSizesSize {
 	return best
 }
 
-
 type QueueItem struct {
-	photo *flickr.PhotosetsGetPhotosPhoto
+	photo    *flickr.PhotosetsGetPhotosPhoto
 	photoset *flickr.PhotosetsGetListPhotoset
 }
