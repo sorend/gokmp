@@ -48,6 +48,7 @@ func initConfig() {
 	viper.SetEnvPrefix("GOKMP")
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
 		// do nothing
 	}
 }

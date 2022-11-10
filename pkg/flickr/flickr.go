@@ -16,10 +16,11 @@ import (
 func NewFlickr(ApiKey string, ApiSecret string, OAuthToken string, OAuthSecret string) *Flickr {
 	config := oauth1.NewConfig(ApiKey, ApiSecret)
 	token := oauth1.NewToken(OAuthToken, OAuthSecret)
-	httpClient := config.Client(oauth1.NoContext, token)
+	oauthClient := config.Client(oauth1.NoContext, token)
+
 	return &Flickr{
 		ApiKey: ApiKey,
-		client: httpClient,
+		client: oauthClient,
 	}
 }
 
@@ -133,6 +134,9 @@ func (f *Flickr) Request(method string, params Params, v interface{}) error {
 	response, err := f.client.Get(url)
 	if err != nil {
 		return err
+	}
+	if response.StatusCode != http.StatusOK {
+		panic(fmt.Sprintf("Error, got response %d %s", response.StatusCode, response.Status))
 	}
 	defer response.Body.Close()
 	bytes, err := ioutil.ReadAll(response.Body)
